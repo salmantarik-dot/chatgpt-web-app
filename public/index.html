@@ -1,16 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Chat with ChatGPT</title>
+  <meta charset="UTF-8" />
+  <title>ChatGPT Web</title>
 </head>
 <body>
   <h1>ChatGPT Web</h1>
-  <form id="chat-form">
-    <input type="text" id="user_input" placeholder="Ask anything..." required style="width: 300px;">
-    <button type="submit">Send</button>
-  </form>
+  <input type="text" id="messageInput" placeholder="Ask anything..." />
+  <button onclick="sendMessage()">Send</button>
   <div id="response"></div>
 
-  <script src="index.js"></script>
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const responseDiv = document.getElementById('response');
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: input.value })
+      });
+
+      const data = await res.json();
+      responseDiv.innerText = data.reply || 'No reply';
+    }
+  </script>
 </body>
 </html>
