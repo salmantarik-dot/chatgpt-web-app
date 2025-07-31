@@ -31,6 +31,7 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+    console.log("🔍 OpenRouter raw response:", JSON.stringify(data, null, 2));
 
     // 🧠 Add this to inspect what's returned from OpenRouter
     console.log('🔍 OpenRouter raw response:', JSON.stringify(data));
