@@ -21,9 +21,9 @@ export default async function handler(req, res) {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': 'Bearer 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',
-        'Content-Type': 'application/json'
-      },
+  'Authorization': 'Bearer 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',
+  'Content-Type': 'application/json'
+}
       body: JSON.stringify({
         model: 'openai/gpt-3.5-turbo',
         messages: [{ role: 'user', content: message }]
