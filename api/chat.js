@@ -1,24 +1,18 @@
 export default async function handler(req, res) {
-  const body = await req.json();
-  const userInput = body.user_input;
+  const { message } = req.body;
 
   const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-...",  // 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
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       model: "openai/gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: "You are a helpful assistant." },
-        { role: "user", content: userInput }
-      ]
-    }),
+      messages: [{ role: "user", content: message }]
+    })
   });
 
   const data = await response.json();
-  const reply = data.choices[0].message.content;
-
-  res.status(200).json({ reply });
+  res.status(200).json({ reply: data.choices?.[0]?.message?.content || "No reply." });
 }
