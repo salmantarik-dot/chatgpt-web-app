@@ -1,107 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Your Policy Agent 2025</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f8f4;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #006400;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 28px;
-    }
-    .container {
-      max-width: 700px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-bottom: 20px;
-    }
-    button {
-      background-color: #006400;
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-    button:hover {
-      background-color: #004d00;
-    }
-    #reply {
-      margin-top: 30px;
-      padding: 20px;
-      background: #f9f9f9;
-      border-left: 4px solid #006400;
-      border-radius: 4px;
-    }
-    footer {
-      text-align: center;
-      margin-top: 50px;
-      color: #888;
-    }
-  </style>
-</head>
-<body>
-  <header>Your Policy Agent</header>
-  <div class="container">
-    <h2>Paste your bullet points below:</h2>
-    <textarea id="points" placeholder="e.g. Digital literacy training, Co-working spaces for youth, Micro-grants program..."></textarea>
-    <button onclick="generatePolicy()">Generate Policy Draft</button>
-    <div id="reply" style="display:none;"></div>
-    <button id="downloadBtn" style="display:none;" onclick="downloadDocx()">Download as .docx</button>
-  </div>
-  <footer>Developed by Salman Tariq | 2025</footer>
-  <script>
-    async function generatePolicy() {
-      const userInput = document.getElementById('points').value;
-      const replyDiv = document.getElementById('reply');
-      const downloadBtn = document.getElementById('downloadBtn');
+<script>
+  async function generatePolicy() {
+    const userInput = document.getElementById('points').value;
+    const replyDiv = document.getElementById('reply');
+    const downloadBtn = document.getElementById('downloadBtn');
 
-      replyDiv.style.display = 'block';
-      replyDiv.innerText = 'Generating policy draft...';
+    replyDiv.style.display = 'block';
+    replyDiv.innerText = 'Generating policy draft...';
 
-      try {
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: userInput })
-        });
-        const data = await response.json();
-        replyDiv.innerText = data.reply || 'No response from AI.';
-        downloadBtn.style.display = 'inline-block';
-      } catch (err) {
-        replyDiv.innerText = 'Error contacting the AI.';
-      }
-    }
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer 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',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'openai/gpt-3.5-turbo',
+          messages: [{ role: 'user', content: userInput }]
+        })
+      });
 
-    function downloadDocx() {
-      const text = document.getElementById('reply').innerText;
-      const blob = new Blob([text], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'PolicyDraft.docx';
-      link.click();
+      const data = await response.json();
+      replyDiv.innerText = data.choices?.[0]?.message?.content || 'No response from AI.';
+      downloadBtn.style.display = 'inline-block';
+    } catch (err) {
+      replyDiv.innerText = 'Error contacting the AI.';
     }
-  </script>
-</body>
-</html>
+  }
+
+  function downloadDocx() {
+    const text = document.getElementById('reply').innerText;
+    const blob = new Blob([text], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'PolicyDraft.docx';
+    link.click();
+  }
+</script>
