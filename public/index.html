@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+<<<<<<< HEAD
   <title>ChatGPT Web</title>
 </head>
 <body>
@@ -25,6 +26,131 @@
 
       const data = await res.json();
       responseDiv.innerText = data.reply || 'No reply';
+=======
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Policy Agent</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f8f4;
+      margin: 0;
+      padding: 0;
+      color: #1e1e1e;
+    }
+
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+      font-size: 2em;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    main {
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      font-size: 1em;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #388e3c;
+      color: white;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2e7d32;
+    }
+
+    .response {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #eef7ee;
+      border-left: 4px solid #2e7d32;
+      border-radius: 4px;
+      white-space: pre-wrap;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      font-size: 0.9em;
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+  <header>Your Policy Agent</header>
+
+  <main>
+    <textarea id="userInput">• Improve quality of education in rural schools
+• Establish minimum digital literacy targets
+• Ensure policy implementation through district officers
+• Provide special incentives for women-led startups</textarea>
+    <button onclick="sendMessage()">Generate Policy</button>
+
+    <div id="response" class="response" style="display:none;"></div>
+    <a id="downloadBtn" href="#" download="policy.docx" style="display:none;">📥 Download as .docx</a>
+  </main>
+
+  <footer>© 2025 · Developed by Salman Tariq</footer>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById('userInput').value;
+      const responseDiv = document.getElementById('response');
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      responseDiv.style.display = 'none';
+      downloadBtn.style.display = 'none';
+      responseDiv.innerText = 'Generating policy...';
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: input })
+        });
+
+        const data = await res.json();
+        if (data.reply) {
+          responseDiv.innerText = data.reply;
+          responseDiv.style.display = 'block';
+
+          // Generate downloadable .docx
+          const blob = new Blob([data.reply], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+          const url = URL.createObjectURL(blob);
+          downloadBtn.href = url;
+          downloadBtn.style.display = 'inline-block';
+        } else {
+          responseDiv.innerText = 'No response from the AI.';
+        }
+      } catch (error) {
+        responseDiv.innerText = '❌ Error contacting the AI.';
+        responseDiv.style.display = 'block';
+      }
+>>>>>>> 8c5ce1e (Initial commit for policy agent)
     }
   </script>
 </body>
